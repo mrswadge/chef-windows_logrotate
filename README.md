@@ -86,6 +86,8 @@ Default: `windows_logrotate`.
 Default: `logrotate.conf.erb`.
 * `schtask_tmpl` - Sets the schtask template source. 
 Default: `schtask.xml.erb`.
+* `schtask_conf` - Override/extend default schtask template variables.
+Default: `{}`.
 * `sensitive` - Suppress logging sensitive information. 
 Default: `true`.
 
