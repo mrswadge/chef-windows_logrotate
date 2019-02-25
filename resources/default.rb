@@ -12,6 +12,7 @@ attribute :run_immediately, kind_of: [TrueClass, FalseClass], default: false
 attribute :cookbook, kind_of: String, default: 'windows_logrotate'
 attribute :conf_tmpl, kind_of: String, default: 'logrotate.conf.erb'
 attribute :schtask_tmpl, kind_of: String, default: 'schtask.xml.erb'
+attribute :schtask_conf, kind_of: Hash, default: {}
 
 attribute :sensitive, kind_of: [TrueClass, FalseClass] # , default: true - see initialize below
 

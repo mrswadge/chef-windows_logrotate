@@ -30,7 +30,8 @@ action :enable do
     arguments: "#{verbose_flag}#{force_flag}-s \"#{state_path}\" \"#{conf_path}\"",
     working_directory: content_dir
   }
-
+  
+  schtask_conf = schtask_conf.merge(new_resource.schtask_conf) if not new_resource.schtask_conf.nil?
   schtask_path = "#{content_dir}\\#{new_resource.name}.xml"
 
   template schtask_path do
