@@ -14,6 +14,12 @@ action :enable do
   content_dir = "#{node['windows_logrotate']['install_dir']}\\Content"
   conf_path = "#{content_dir}\\#{new_resource.name}.conf"
 
+  # ensure that the content directory exists.
+  directory content_dir do
+    recursive true
+    action :create
+  end
+  
   # use template instead of file to manage Windows line endings
   template conf_path do
     source new_resource.conf_tmpl
