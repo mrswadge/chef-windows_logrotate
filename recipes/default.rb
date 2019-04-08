@@ -9,11 +9,8 @@ if platform?('windows')
     block do
       # Check if the previous chef-client run installed correctly.
       remove_cache = false
-      #puts ">>> CACHE PATH <<< : #{cache_path}"
       if File.exist?(cache_path)
-        #puts ">>> CACHE EXISTS <<< : TRUE"
         if not File.exist?(logrotate_exe)
-          #puts ">>> LOG ROTATE EXISTS <<< : FALSE"
           puts "Detected logrotate is not installed properly."
           remove_cache = true
         end 
@@ -21,28 +18,27 @@ if platform?('windows')
       
       # Check we have the correct verison installed.
       if File.exist?(logrotate_exe)
-        #puts ">>> LOG ROTATE EXISTS <<< : TRUE"
         shell_out!("#{logrotate_exe} -v").stdout.each_line do |line|
           unless line.nil?
             vline = line[line.index(':')..-1].strip if line['logrotate: logrotate ']
             unless vline.nil?
               if not vline.include?(logrotate_version)
-                #puts ">>> LOG ROTATE CORRECT VERSION <<< : FALSE"
                 puts "Detected different version of logrotate installed."
                 remove_cache = true
-                
-                # uninstall the existing version.
-                #puts ">>> UNINSTALLING LOG ROTATE <<<"
-                uninstall = Chef::Resource::WindowsPackage.new('LogRotate', run_context)
-                uninstall.run_action(:remove)
               end
             end
           end
         end
       end
-      
-      #puts ">>> DELETE CACHE #{cache_path} <<< : #{remove_cache} and #{File.exist?(cache_path)}"
+
+      # delete the cached installer package
       File.delete(cache_path) if remove_cache and File.exist?(cache_path)
+      
+      # uninstall the existing version.
+      if remove_cache
+        uninstall = Chef::Resource::WindowsPackage.new('LogRotate', run_context)
+        uninstall.run_action(:remove)
+      end
     end
   end
   
